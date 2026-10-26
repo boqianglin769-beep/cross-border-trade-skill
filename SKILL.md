@@ -1,3 +1,8 @@
+---
+name: cross-border-trade
+description: Create regulation-aware cross-border sea freight quotations and client-ready Word (.docx) documents. Use for Chinese or English requests about export trade quotations, forwarder inquiries, destination-country customs checks, product compliance, OOG validation, and trade follow-ups.
+---
+
 # Cross-Border Trade Quotation Skill (通用跨境贸易报价技能)
 
 A production-ready skill for export trade specialists handling cross-border sea freight quotations from China to **multiple countries/regions** (Brazil, USA, EU, UK, Southeast Asia, Middle East, Japan, Korea), with automatic Word quotation generation and regulation-aware pricing.
