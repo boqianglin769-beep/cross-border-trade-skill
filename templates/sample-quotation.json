@@ -1,0 +1,40 @@
+{
+  "quote_no": "Q-20261026-001",
+  "quote_date": "2026-10-26",
+  "valid_until": "2026-11-25",
+  "seller": {"name": "[公司名称]", "contact": "[邮箱/电话]"},
+  "client": {"name": "[客户名称]", "country": "Brazil", "destination": "Salvador, Brazil", "address_note": ""},
+  "product": {
+    "name": "Helmet Cleaning Machine",
+    "model": "HC-2000",
+    "hs_code": "8451.30",
+    "qty": 1,
+    "unit": "SET",
+    "packing": "Wooden case 700x680x2000mm / 0.952 CBM / 144kg G.W."
+  },
+  "pricing": {
+    "factory_price": 12000.0,
+    "price_is_tax_inclusive": false,
+    "tax_rate": 0.13,
+    "profit_margin": 0.25,
+    "exchange_rate": 6.5,
+    "exchange_rate_note": "Fixed 6.5 per boss instruction"
+  },
+  "forwarder_costs": [
+    {"item": "Ocean Freight (LCL 1 CBM)", "amount": 1450.0, "currency": "USD", "confirmed": true},
+    {"item": "Origin charges (起运港费)", "amount": 2945.0, "currency": "RMB", "confirmed": true},
+    {"item": "Destination THC/CFS", "amount": 380.0, "currency": "USD", "confirmed": false}
+  ],
+  "insurance": {"basis": 1.10, "rate": 0.001},
+  "trade_terms": "CIF Salvador CFS",
+  "delivery_note": "Port-to-port. Inland trucking in Brazil arranged by buyer.",
+  "regulation_notes": [
+    "Clearance in Brazil requires a local entity holding CNPJ + RADAR per IN RFB 1.984/2020; this quote is CIF to port only.",
+    "Product contains cleaning liquid; SDS/MSDS to be provided, DGR status pending confirmation."
+  ],
+  "payment_terms": "30% deposit by T/T, 70% against copy of B/L",
+  "lead_time": "15-20 days after deposit",
+  "currency": "USD",
+  "language": "bilingual",
+  "remarks": "Sample quotation for testing only. All amounts are placeholders."
+}
