@@ -91,10 +91,11 @@ python scripts/generate_quotation.py <input.json> "C:/path/to/报价单_Qxxx.doc
 
 Script output shows computed figures (product USD base, forwarder USD, insurance, grand total) for cross-check.
 
-### Step 5: Validate (11 Mandatory Checks)
+### Step 5: Validate (13 Mandatory Checks + 8 Special-Scene Checks)
 
 Run `templates/cif-validator.md`:
 
+**基础校验 (13 项)**:
 1. Factory price confirmed (written)
 2. Tax rate confirmed (13% or 10%)
 3. Tax applied to correct base
@@ -106,8 +107,18 @@ Run `templates/cif-validator.md`:
 9. Unconfirmed costs marked TBC
 10. Validity period stated (15-30 days)
 11. Boss approval obtained (fixed rate / special pricing)
+12. Regulation notes present & brief (v2.0)
+13. Regulation validity re-checked with date recorded (v2.0)
 
-**NEW (v2.0):** 12. Regulation notes present & brief; 13. Regulation validity re-checked with date recorded.
+**特殊场景校验 (8 项 — v2.1)**:
+14. **运输可达性**：收货地址是否偏远/限高/限重？货代书面确认能否送达？若不能 → 是否已向客户提供 ≥2 个替代方案并获书面确认？
+15. **产品属性合规**：产品是否含电池/液体/磁性材料/粉末？工厂是否提供 SDS/MSDS/UN38.3？若属性突变 → 是否已三方协商解决方案？
+16. **贸易术语边界**：报价单上 CIF/DAP/EXW 是否明确？客户是否理解术语含义？是否因目的国法规限制无法做 DDP（如巴西）？
+17. **报价时效与条款对齐**：报价单有效期是否与货代书面报价一致？条款是否与货代一致（固定/可调/BAF/GRI）？
+18. **货代违约责任**：货代报价单是否有明确有效期和条款？若临时变卦 → 是否已追究责任或启用备用货代？
+19. **变更管理**：时间/地点/数量是否在合同/报价单中明确？客户变更时是否已重新核实工厂/货代/法规？
+20. **备用货代**：主货代报价有效期 <7 天或条款模糊时 → 是否已向备用货代询价？
+21. **不可抗力/汇率突变**：报价单是否含汇率调整条款（>3% 触发）？是否含 Force Majeure 条款？
 
 ### Step 6: Boss Approval & Send
 

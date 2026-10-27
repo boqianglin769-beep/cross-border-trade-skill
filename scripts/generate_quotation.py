@@ -33,6 +33,10 @@ Input JSON schema (see templates/quotation-docx.md for field notes):
   "insurance": {"basis": 1.10, "rate": 0.001},
   "trade_terms": "CIF Salvador CFS",
   "delivery_note": "Port-to-port. Inland trucking in Brazil arranged by buyer.",
+  "edge_case_notes": [
+      "【运输可达性】Destination port (Salvador) confirmed; inland to rural ZIP 45xxx-xxx is outside carrier standard service zone.",
+      "【替代方案】Deliver to nearest CFS terminal in Salvador; buyer arranges last-mile pickup at own cost. No impact on quoted freight or lead time."
+  ],
   "regulation_notes": [
       "Clearance in Brazil must be performed by a local entity holding CNPJ + RADAR per IN RFB 1.984/2020; this quote is CIF to port only."
   ],
@@ -256,6 +260,16 @@ def main():
         set_cell_bg(tt.rows[i].cells[0], "EEF2F7")
         set_cell_text(tt.rows[i].cells[1], str(v), size=9)
 
+    # special conditions / edge_case_notes
+    edge_cases = data.get("edge_case_notes", [])
+    if edge_cases:
+        set_para(doc, "", size=4)
+        set_para(doc, "Special Conditions / 特殊条款", size=12, bold=True, space_after=4)
+        for ec in edge_cases:
+            set_para(doc, "- " + str(ec), size=9, space_after=2)
+        set_para(doc, "Disclaimer: Edge-case alternatives are quoted based on current information; actual feasibility to be reconfirmed before order confirmation.",
+                 size=8, color=(0x88, 0x88, 0x88), space_after=4)
+
     # regulation notes (brief, as user required)
     regs = data.get("regulation_notes", [])
     if regs:
@@ -301,6 +315,11 @@ def main():
             f"Forwarder USD   : {forwarder_usd:,.2f} USD",
             f"Insurance       : ({product_usd:,.2f} + {forwarder_usd:,.2f}) x {basis} x {rate} = {insurance:,.2f} USD",
             f"GRAND TOTAL     : {grand_total:,.2f} {currency}",
+        ]
+        if edge_cases:
+            detail_lines.append("Edge-case / special scenario notes:")
+            detail_lines += ["  - " + ec for ec in edge_cases]
+        detail_lines += [
             "Regulations (brief citation):",
         ]
         detail_lines += ["  - " + r for r in regs]

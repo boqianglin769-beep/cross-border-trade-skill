@@ -33,12 +33,21 @@
 | `insurance.basis/rate` | 保险基数与费率（默认 110% × 0.1%） | 🟡 | `1.10` / `0.001` |
 | `trade_terms` | 贸易术语（CIF [港口] / DAP / FOB） | ✅ | `CIF Salvador CFS` |
 | `delivery_note` | 交货范围说明（到港/到门、内陆由谁负责） | ✅ | 见示例 |
+| `edge_case_notes[]` | **特殊场景简要说明**（风险提示 + 替代方案） | 🟡 | 见特殊场景标注示例 |
 | `regulation_notes[]` | **合规依据简要说明**（法规名称 + 一句结论） | ✅ | `Clearance in Brazil requires local CNPJ + RADAR holder per IN RFB 1.984/2020; quote is CIF to port only` |
 | `payment_terms` | 付款方式（T/T、L/C） | ✅ | `30% deposit, 70% against B/L copy` |
 | `lead_time` | 交期 | 🟡 | `15-20 days after deposit` |
 | `currency` | 报价币种（默认 USD） | ✅ | `USD` |
 | `language` | `en` / `bilingual` | 🟡 | `bilingual` |
 
+> `delivery_note` 示例：
+> ```
+> Port-to-port. Inland trucking in Brazil arranged by buyer.
+> 【偏远地址限制】Buyer address (Rural district, ZIP 45xxx-xxx) is outside carrier's standard service zone. 
+>   Alternative: Delivery to nearest CFS terminal in Salvador; buyer arranges last-mile pickup. 
+>   Cost impact: USD 0 (buyer bears inland); lead time unchanged.
+> ```
+>
 > `forwarder_costs` 每项：`{"item": "费用名", "amount": 金额, "currency": "USD"|"RMB", "confirmed": true|false}`；
 > 未书面确认的项目，脚本自动在费用名后标注 `(TBC)`，不得当作确认价。
 
@@ -53,6 +62,36 @@
 保险      = (产品美元价 + 货代美元合计) × 110% × 费率
 总价      = 产品美元价 + 货代美元合计 + 保险
 ```
+
+## 特殊场景标注示例
+
+以下三种典型特殊场景，应在 `edge_case_notes` 中以**一句话风险 + 一句话替代方案**的格式写入；脚本自动输出到报价单 "Special Conditions / 特殊条款" 区域。
+
+### 1. 运输可达性受限
+```json
+"edge_case_notes": [
+  "【运输可达性】Destination port (Salvador) confirmed by forwarder; inland trucking to rural ZIP 45xxx-xxx is outside carrier standard service zone.",
+  "【替代方案】Deliver to nearest CFS terminal in Salvador; buyer arranges last-mile pickup at own cost. No impact on quoted ocean freight or lead time."
+]
+```
+
+### 2. 产品属性突变（电压/认证差异）
+```json
+"edge_case_notes": [
+  "【产品属性突变】Default model HC-2000 runs on 380V/3-phase. Buyer requested 220V/1-phase variant, which requires alternate motor and CE re-verification.",
+  "【替代方案】Switch to HC-2000-LV (220V certified variant). Factory price +RMB 800; lead time +5 days for additional testing. Quote below reflects HC-2000-LV pricing."
+]
+```
+
+### 3. 条款对齐冲突（客户 PO 与报价条款不一致）
+```json
+"edge_case_notes": [
+  "【条款对齐】Client PO states DDP terms; this quotation is CIF to port per company standard for Brazil. DDP would require local IOR, import VAT prepayment, and inland liability transfer.",
+  "【替代方案】Maintain CIF to port in this quote; append optional DDP addendum if client provides valid Brazil IOR and accepts 12% import VAT advance."
+]
+```
+
+**原则**：`edge_case_notes` 仅列“已识别、已评估、已给出替代方案”的风险；未确认的风险不入报价单正文，改写入内部明细供追溯。
 
 ## 生成示例
 

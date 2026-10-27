@@ -1,8 +1,3 @@
----
-name: cross-border-trade
-description: Create regulation-aware cross-border sea freight quotations and client-ready Word (.docx) documents. Use for Chinese or English requests about export trade quotations, forwarder inquiries, destination-country customs checks, product compliance, OOG validation, and trade follow-ups.
----
-
 # Cross-Border Trade Quotation Skill (通用跨境贸易报价技能)
 
 A production-ready skill for export trade specialists handling cross-border sea freight quotations from China to **multiple countries/regions** (Brazil, USA, EU, UK, Southeast Asia, Middle East, Japan, Korea), with automatic Word quotation generation and regulation-aware pricing.
@@ -12,7 +7,7 @@ A production-ready skill for export trade specialists handling cross-border sea 
 ## Metadata
 
 - **name**: cross-border-trade
-- **version**: 2.0.0
+- **version**: 2.1.0
 - **author**: [Your Name]
 - **license**: MIT
 - **language**: zh-CN / en-US (bilingual)
@@ -43,6 +38,10 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | `校验 OOG` | Validate OOG container requirements |
 | `[国家]航线` (e.g. `巴西航线` `美国航线` `欧盟航线`) | Show that country's route & regulation notes |
 | `报错提醒` | Show common quotation pitfalls |
+| `特殊场景` / `边界情况` | Trigger Special Scenarios Handling workflow (`workflows/edge-cases.md`) |
+| `偏远地址` | Verify transport reachability & provide alternative delivery options |
+| `产品合规突变` | Handle sudden product compliance changes & re-validation |
+| `货代违约` | Generate contingency plan & replacement forwarder inquiry |
 | `全流程` | Show complete trade execution workflow |
 
 ---
@@ -114,7 +113,44 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 ---
 
-### Branch 3: Port Comparison & Freight Difference
+### Branch 3: Special Scenarios Handling (New in v2.1.0)
+
+**Purpose**: Handle edge cases, sudden changes, and exceptional situations that fall outside standard workflows.
+
+**Scope**: `workflows/edge-cases.md`
+
+1. **Transport Reachability Issues**
+   - Verify if destination address is reachable by standard logistics (e.g., remote areas, islands, non-operational ports)
+   - If unreachable → provide alternative delivery options (nearest operational port, multi-modal transit, or customer self-collection)
+   - Document reachability confirmation source and date
+
+2. **Product Compliance Sudden Changes**
+   - Monitor for sudden regulation updates affecting product category (new bans, revised HS codes, updated certification requirements)
+   - If compliance status changes mid-project → halt quotation, re-verify with official source, notify boss immediately
+   - Re-run Branch 0 (Regulation Check) before resuming
+
+3. **Terminology & Boundary Ambiguity**
+   - Clarify ambiguous terms in client requirements (e.g., "door-to-door" vs "port-to-port", "ready to ship" vs "EXW factory")
+   - Document agreed definitions in quotation notes to prevent disputes
+
+4. **Timeline Misalignment**
+   - Factory production delay vs. forwarder sailing schedule conflict
+   - Quotation validity expiration during client decision period
+   - Provide buffer options and revised schedules with cost impact
+
+5. **Forwarder Default / Failure**
+   - Forwarder fails to provide confirmation by deadline, or confirms then withdraws
+   - Generate contingency plan: activate backup forwarder inquiry, adjust timeline, notify client with revised ETA
+
+6. **Change Management**
+   - Client requests specification, quantity, or destination change after quotation issued
+   - Re-compute costs, re-verify regulations, document change order, obtain boss approval for price adjustments
+
+**Hard rule**: Any special scenario that affects pricing, timeline, or compliance must be escalated to [老板] before client communication.
+
+---
+
+### Branch 4: Port Comparison & Freight Difference
 
 **For USA:**
 - Wisconsin (Elkhart Lake) is inland → quote CIF Chicago or CIF New York
@@ -134,7 +170,7 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 ---
 
-### Branch 4: Bilingual Report to [老板] (Boss)
+### Branch 5: Bilingual Report to [老板] (Boss)
 
 **Structure:**
 - Project name / client (placeholder: [Client Name])
@@ -147,7 +183,7 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 ---
 
-### Branch 5: Follow-up Messages
+### Branch 6: Follow-up Messages
 
 **For Forwarder:**
 - Request updated sailing schedule / quotation validity extension
@@ -165,7 +201,7 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 ---
 
-### Branch 6: Risk Alerts
+### Branch 7: Risk Alerts
 
 **OOG (Out of Gauge) Container Risks:**
 - Lashing/securing NOT included in freight? Confirm separately
@@ -205,6 +241,11 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | 8 | **Do NOT guess unconfirmed costs** | Mark as "budget / awaiting confirmation" |
 | 9 | **Do NOT quote without boss approval** | Fixed rates / special pricing / margin ≠ 25% |
 | 10 | **Clearance responsibility must be explicit** | Brazil: buyer CNPJ+RADAR; EU: buyer EORI; USA: IOR named — never leave ambiguous |
+| 11 | **Transport reachability must be verified with alternatives** | For remote/inaccessible addresses, always confirm reachability and provide alternative delivery options; never assume door-to-door is always possible |
+| 12 | **Product properties must be confirmed at factory stage** | Product attributes (dimensions, weight, hazmat status, certifications) must be factory-confirmed before quotation; never rely on client descriptions alone |
+| 13 | **Quotation terms must align with forwarder terms** | Any change in forwarder terms (costs, schedules, routes) must be reflected in quotation updates; maintain version control for quote revisions |
+| 14 | **Sudden compliance changes halt the workflow** | If product or destination compliance status changes mid-process, immediately halt quotation, re-verify, and escalate to [老板] before proceeding |
+| 15 | **Forwarder default requires immediate contingency** | If forwarder fails to confirm or withdraws, activate backup inquiry within 24h and notify client with revised timeline |
 
 ---
 
@@ -264,3 +305,4 @@ Load persona from `agents/trade-agent.md` when this skill is activated.
 
 - v1.0.0 (2026-10-26): Initial release based on Brazil helmet cleaning machine & USA Wisconsin mobile house lessons.
 - v2.0.0 (2026-10-26): **Universal multi-country upgrade** — regulation library for 10+ countries/regions (Brazil, USA, EU/DE/NL, UK, VN/TH/SG, UAE/KSA, JP/KR), product compliance module (UN38.3/MSDS/IMDG/CE/OOG), automatic Word (.docx) quotation generation from product & forwarder inputs, regulation citation with validity dates, brief compliance notes in quotations.
+- v2.1.0 (2026-10-26): **Special Scenarios & Edge Cases Handling** — added Branch 3 for special scenarios (transport reachability, product compliance sudden changes, terminology boundaries, timeline misalignment, forwarder default, change management), 5 new hard rules (#11–#15) covering transport alternatives, factory-stage product confirmation, forwarder-quote alignment, compliance change halting, and forwarder default contingency; added 4 new trigger commands (`特殊场景`, `偏远地址`, `产品合规突变`, `货代违约`).

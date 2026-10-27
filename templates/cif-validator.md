@@ -272,11 +272,19 @@ Critical: "Route is available" ≠ "LCL is available". Must confirm separately.
 [ ] FCL/LCL confirmed separately
 [ ] Special client pricing (fixed rate) approved by boss
 [ ] Quotation validity period reasonable (15-30 days)
-[ ] No fabricated sailing schedules or promised costs
-[ ] All numbers use consistent units (USD, kg, CBM)
-[ ] (v2.0) Destination-country regulation checked & cited regulations verified online
-[ ] (v2.0) Compliance notes present but brief (no full legal text)
-[ ] (v2.0) Regulation validity date recorded in work sheet
+  [ ] No fabricated sailing schedules or promised costs
+  [ ] All numbers use consistent units (USD, kg, CBM)
+  [ ] (v2.0) Destination-country regulation checked & cited regulations verified online
+  [ ] (v2.0) Compliance notes present but brief (no full legal text)
+  [ ] (v2.0) Regulation validity date recorded in work sheet
+  [ ] (v2.1) Transport accessibility verified: address not remote/height-restricted, or alternatives provided
+  [ ] (v2.1) Product compliance confirmed with factory (battery/chemical/magnetic/powder)
+  [ ] (v2.1) Trade terms clearly stated and client understands (CIF=port, DAP=door, no DDP where prohibited)
+  [ ] (v2.1) Quotation validity & terms mirror forwarder's written quote exactly
+  [ ] (v2.1) Forwarder quote has clear validity period and firm terms (or marked TBC / backup forwarder consulted)
+  [ ] (v2.1) Change management: time/place/qty defined; client changes trigger re-verification
+  [ ] (v2.1) Exchange-rate adjustment clause present (>3% trigger)
+  [ ] (v2.1) Force Majeure clause present in contract/quotation
 ```
 
 ### F2. Boss Approval (if required)
