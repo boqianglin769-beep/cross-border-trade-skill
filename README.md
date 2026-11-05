@@ -1,6 +1,6 @@
 # Cross-Border Trade Execution Skill
 
-> 一套面向中国出口贸易执行专员的通用 Agent Skill，覆盖从货代询价、目的国法规核实、CIF 报价生成（Word 报价单）到向老板汇报、催单跟进的全流程。适配 Codex、Skyl 及通用大模型平台。
+> 一套面向中国出口贸易执行专员的通用 Agent Skill，覆盖从货代询价、目的国法规核实、CIF 报价生成（Word 报价单）到订单履约执行（下单→生产→装柜报关→清关→退税）、向老板汇报、催单跟进的全流程。适配 Codex、Skyl 及通用大模型平台。
 
 ---
 
@@ -14,7 +14,7 @@
   - **东南亚**：越南、泰国、新加坡
   - **中东**：阿联酋（电子发票分阶段）、沙特（SABER/SASO + ZATCA）
   - **东亚**：日本（2026 消费税改革、通关代理）、韩国
-- **核心任务**：货代询价、港口核对、目的国法规与时效性核实、CIF 报价生成（Word 报价单）、老板汇报、催单话术、OOG 超限柜校验
+- **核心任务**：货代询价、港口核对、目的国法规与时效性核实、CIF 报价生成（Word 报价单）、**订单履约执行全流程**（下单前准备、包装设计、检测认证、验货排柜、装柜报关、目的港清关、出口退税）、老板汇报、催单话术、OOG 超限柜校验
 
 ---
 
@@ -22,12 +22,13 @@
 
 | 模块 | 文件 | 说明 |
 |------|------|------|
-| **主入口** | `SKILL.md` | 技能定义（v2.1）、触发指令、法规核实门（Gate A/B/C）、工作流分支、15 条硬规则 |
-| **角色设定** | `agents/trade-agent.md` | 外贸执行专员身份、6 大职责、多国服务范围、15 条硬规则 |
+| **主入口** | `SKILL.md` | 技能定义（v2.2）、触发指令、法规核实门（Gate A/B/C）、工作流分支、21 条硬规则 |
+| **角色设定** | `agents/trade-agent.md` | 外贸执行专员身份、7 大职责、多国服务范围、21 条硬规则 |
 | **询价工作流** | `workflows/inquiry.md` | 货代询价全流程：目的地核实、FCL/LCL 分开确认、费用拆分 |
 | **报价工作流** | `workflows/quotation.md` | Step 0 法规核实门 + CIF 报价公式 + 汇率规则 + 生成 Word 报价单 + 13 项校验 |
 | **校验工作流** | `workflows/validation.md` | OOG 超限货决策树、港口能力验证、Regulation Gate 多国对照表 |
 | **特殊场景工作流** | `workflows/edge-cases.md` | 边界情况处理：运输可达性、产品合规突变、术语边界、时效对齐、货代违约、变更管理（v2.1 新增） |
+| **履约执行工作流** | `workflows/execution.md` | 订单履约全流程：下单前 → 生产中 → 生产完成 → 装柜与报关 → 目的港清关 → 出口退税（v2.2 新增） |
 | **法规库索引** | `regulations/_INDEX.md` | 六区域法规文件索引、时效性规则（Authority / Validity / Verified date） |
 | **各国法规库** | `regulations/brazil.md` 等 6 文件 | 巴西、美国、欧盟、东南亚、中东、日韩 + `products.md` 产品准入规则，全部标注官方依据与时效性 |
 | **报价单脚本** | `scripts/generate_quotation.py` | 输入 JSON（产品报价+货代信息+汇率+法规说明）→ 直接生成 Word 报价单 + 计算明细 |
@@ -37,6 +38,7 @@
 | **中文跟进模板** | `templates/follow-up.md` | 微信催货代、催工厂、给老板汇报话术 |
 | **报价核对表** | `templates/checklist.md` | CIF 报价前 67 项自检清单（含第七部分法规与时效性核对） |
 | **报价校验器** | `templates/cif-validator.md` | 逐项验证报价单计算、文档完整性与法规时效性（D1–D4） |
+| **履约核对表** | `templates/execution-checklist.md` | 履约执行 68 项核对清单 + 产品明细表/产品检测资料表/报关材料/退税资料表单（v2.2 新增） |
 | **使用说明** | `README.md` | 本文件 |
 | **开源协议** | `LICENSE` | MIT License |
 
@@ -82,7 +84,7 @@ python scripts/generate_quotation.py templates/sample-quotation.json
 ### 方式四：GitHub 导入（Codex / 支持远程 Skill 的平台）
 
 ```bash
-git clone https://github.com/[your-username]/cross-border-trade-skill.git
+git clone https://github.com/boqianglin769-beep/cross-border-trade-skill.git
 ```
 
 ---
@@ -108,7 +110,13 @@ git clone https://github.com/[your-username]/cross-border-trade-skill.git
 | `偏远地址` | 运输可达性核实与替代方案 | `workflows/edge-cases.md` |
 | `产品合规突变` | 产品合规状态突变处理流程 | `workflows/edge-cases.md` |
 | `货代违约` | 货代违约应急与备选方案 | `workflows/edge-cases.md` |
-| `全流程` | 完整流程总览 | `SKILL.md` |
+| `履约` / `全流程` / `出货流程` | 订单履约全流程（下单前→生产→装柜报关→清关→退税） | `workflows/execution.md` |
+| `下单` / `生产` / `包装设计` | 下单前与生产中步骤 | `workflows/execution.md` |
+| `检测` / `认证` | 产品检测与认证 | `workflows/execution.md` + `regulations/products.md` |
+| `验货` / `排柜` / `装柜` | 生产完成阶段（验货/排柜/装柜信息对接） | `workflows/execution.md` |
+| `报关` / `提单补料` / `SI` | 出口报关与提单补料 | `workflows/execution.md` |
+| `清关文件` / `ISF` | 目的港清关文件与 ISF | `workflows/execution.md` |
+| `退税` | 出口退税资料与证据链 | `workflows/execution.md` |
 
 ---
 
@@ -129,6 +137,12 @@ git clone https://github.com/[your-username]/cross-border-trade-skill.git
 13. **报价条款必须与货代条款一致** — 货代费用、船期、路线如有变更，报价单必须同步更新，保持版本追溯
 14. **合规突变必须暂停流程并上报** — 产品或目的国合规状态在项目中途发生变化，须立即停止报价，重新核实并上报 [老板] 后方可继续
 15. **货代违约必须启动应急方案** — 货代未按时确认或临时撤单，须在 24 小时内启动备选货代询价，并通知客户调整交期
+16. **提单补料（SI）必须与实装一致** — SI 重量与过磅误差 ≤5%；实装与排柜方案不符须第一时间更新《实际装柜清单》与 SI
+17. **报关与清关「单单一致、单货一致」** — 报关资料品名/规格/数量/毛净重/体积/HS/柜号·封号完全一致；清关三单（提单/发票/箱单）一致
+18. **如实申报报关金额** — 按实际成交金额申报，不低报不高报；合同协议号填最终 PO 号
+19. **前置合规文件必须齐备** — 电池 UN38.3 + MSDS + 非危保函；玩具 CPC/ASTM F963-23/CPSIA；化工 微生物/TRA/防腐报告；美国 ISF 由客户提交（离港前 72h）
+20. **退税资料按柜归档、证据链完整** — 含司机/运输/出库/入仓等全程文件；退税汇率取装柜当月第一个工作日汇率
+21. **产品版权/知识产权前置核实** — 首次对接产品先确认版权归属；报价/生产前核实认证有效性及适用国家
 
 ---
 
@@ -177,6 +191,7 @@ git clone https://github.com/[your-username]/cross-border-trade-skill.git
 
 ## 版本历史
 
+- **v2.2.0** (2026-11-04): 订单履约与出口合规升级 —— 并入公司《外贸流程以及注意要点》：新增履约执行工作流（`workflows/execution.md`，6 阶段：下单前→生产中→生产完成→装柜报关→目的港清关→出口退税）与履约核对表/表单（`templates/execution-checklist.md`，68 项 + 4 张表单）；硬规则从 15 条扩至 21 条；`regulations/products.md` 补充美国玩具证书（ASTM F963-23/CPSIA/CPC）与 CPSC 警示语规则；新增 12 个履约触发指令
 - **v2.1.0** (2026-10-26): 特殊场景与边界情况处理升级 —— 新增特殊场景工作流（`workflows/edge-cases.md`），覆盖运输可达性核实、产品合规突变、术语边界、时效对齐、货代违约、变更管理 6 大场景；硬规则从 10 条扩充至 15 条；新增 4 个触发指令（`特殊场景` / `偏远地址` / `产品合规突变` / `货代违约`）
 - **v2.0.0** (2026-10-26): 通用化升级 —— 覆盖巴西/美国/欧盟/东南亚/中东/日韩六区域、新增法规库（含官方依据与时效性标注）、新增 Word 报价单自动生成脚本与模板、新增法规核实门（Gate A/B/C）、核对表升级至 67 项
 - **v1.0.0** (2026-10-26): 初始版本，基于巴西头盔清洗机项目和美国威斯康星州移动房屋项目实战复盘
@@ -200,4 +215,4 @@ MIT License — 详见 [LICENSE](LICENSE) 文件。
 
 ---
 
-> **一句话总结**：导入这套 Skill，输入"询价 巴西 Salvador"或"做报价"，Agent 会自动核实目的国法规（含官方依据与时效性）、引导你完成从询价到报价的全流程，并直接用脚本输出面向客户的 Word 报价单，避免报错、漏项、踩坑。
+> **一句话总结**：导入这套 Skill，输入"询价 巴西 Salvador"、"做报价"或"履约"，Agent 会自动核实目的国法规（含官方依据与时效性）、引导你完成从询价、报价到订单履约（下单→生产→装柜报关→清关→退税）的全流程，并直接用脚本输出面向客户的 Word 报价单，避免报错、漏项、踩坑。

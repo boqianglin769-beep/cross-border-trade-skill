@@ -31,3 +31,27 @@
 ## 4. 危险品申报「三单一致」纪律
 
 发票 / 装箱单 / 提单 + 报关单的品名、HS、数量、重量、UN 编号必须一致；含电池/液体时品名后标注"含锂电池"或"含液体"字样，避免瞒报导致扣柜罚款。
+
+## 5. 美国玩具/儿童产品证书与警示语（出口美国必查）
+
+**证书清单：**
+
+| 证书 | 适用范围 | 备注 |
+|------|----------|------|
+| ASTM F963-23 | 14 岁以下儿童玩具 | 23 年最新标准；后续按最新规定更新 |
+| CPSIA | 不超过 12 岁的儿童 | |
+| 微生物 / TRA / 防腐 | 常见于史莱姆、泡泡水等化工材料 | 三份证书检测周期较长，如有要求提前送检/更新 |
+| 电池检测证书 | 含电池产品 | UN38.3 / 海运 / MSDS，一般可直接用工厂提供的证书 |
+| CPC 证书 | 玩具产品 | 完成 ASTM F963-23、CPSIA 后出具，需向工厂提供美国进口商信息 |
+
+- **CPC（Children's Product Certificate）**：需含产品识别信息（品名/描述/型号）、美国进口商或制造商信息、记录保管人联系信息、生产日期与地点；若客户要求以客户公司名义，须将**最终产品 + 外包装**送检并提供客户与产品信息给检测中心；严格核对证书品名/规格/型号与实际产品一致，并**避开版权问题**。
+- **检测机构**：须与有国际认证资质的机构合作；美国资质实验室可在 CPSC 官网查询：`https://www.cpsc.gov/cgi-bin/LabSearch/default.aspx`。
+
+**玩具外包装警示语规则（美国 CPSC / ASTM F963，来源：内部流程文档 + CPSC 公开规范）：**
+
+- 核心原则：警告必须清晰易读、位置醒目、语言直接；含小零件玩具必须标注窒息风险警告。
+- 典型表述：`WARNING: Choking hazard - Small parts. Not for children under 3 years.`
+- 「WARNING」需突出显示（加粗/变色/下划线），位于产品主展示面板；警告语须包含危险类型（Choking hazard）+ 危险源（Small parts）+ 明确年龄限制。
+- 3–6 岁儿童玩具含小部件：`WARNING: CHOKING HAZARD - Small parts. Not for children under 3 yrs.`
+- 气球类：`WARNING: CHOKING HAZARD - Children under 8 yrs can choke or suffocate on uninflated or broken balloons. Adult supervision required.`
+- 出口美国新产品送检时，**新产品连带外包装需一并送检**；美国对包装字体大小有要求，具体字号咨询检测机构。

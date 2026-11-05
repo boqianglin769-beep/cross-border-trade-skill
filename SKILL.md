@@ -1,3 +1,7 @@
+---
+name: cross-border-trade
+description: Create regulation-aware cross-border sea freight quotations and client-ready Word (.docx) documents. Use for Chinese or English requests about export trade quotations, forwarder inquiries, destination-country customs checks, product compliance, OOG validation, trade execution, and follow-ups.
+---
 # Cross-Border Trade Quotation Skill (通用跨境贸易报价技能)
 
 A production-ready skill for export trade specialists handling cross-border sea freight quotations from China to **multiple countries/regions** (Brazil, USA, EU, UK, Southeast Asia, Middle East, Japan, Korea), with automatic Word quotation generation and regulation-aware pricing.
@@ -7,8 +11,8 @@ A production-ready skill for export trade specialists handling cross-border sea 
 ## Metadata
 
 - **name**: cross-border-trade
-- **version**: 2.1.0
-- **author**: [Your Name]
+- **version**: 2.2.0
+- **author**: boqianglin769-beep
 - **license**: MIT
 - **language**: zh-CN / en-US (bilingual)
 - **last_regulation_review**: 2026-10-26（法规库复核日，正式报价前须再次复核时效）
@@ -21,7 +25,7 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 - Products: General categories (mobile houses, cleaning machines, electronics/battery, chemicals/liquid, machinery/OOG)
 - Routes: China origin → Brazil | USA | EU (Germany/Netherlands) | UK | Vietnam/Thailand/Singapore | UAE/Saudi Arabia | Japan/Korea
-- Core duties: Verify destination-country import/customs rules, confirm forwarder terms, generate **Word (.docx) quotations** directly to client, ensuring regulation-based and time-verified pricing
+- Core duties: Verify destination-country import/customs rules, confirm forwarder terms, generate **Word (.docx) quotations** directly to client, ensuring regulation-based and time-verified pricing; and execute the end-to-end **order fulfilment chain** (pre-order compliance → in-production packaging/testing → inspection/container plan → loading & export declaration → destination clearance → export tax rebate)
 
 ---
 
@@ -42,7 +46,13 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | `偏远地址` | Verify transport reachability & provide alternative delivery options |
 | `产品合规突变` | Handle sudden product compliance changes & re-validation |
 | `货代违约` | Generate contingency plan & replacement forwarder inquiry |
-| `全流程` | Show complete trade execution workflow |
+| `履约` / `全流程` / `出货流程` | Order-execution full process (`workflows/execution.md`): pre-order → production → loading/customs → clearance → rebate |
+| `下单` / `生产` / `包装设计` | Pre-order & in-production steps (product details, packaging design, testing) |
+| `检测` / `认证` | Product testing & certification (ASTM F963 / CPSIA / CPC / 微生物·TRA·防腐 / UN38.3) |
+| `验货` / `排柜` / `装柜` | Production-complete steps (inspection, container plan, loading info to forwarder/factory) |
+| `报关` / `提单补料` / `SI` | Export customs declaration & Shipping Instructions (SI) |
+| `清关文件` / `ISF` | Destination clearance documents & US ISF |
+| `退税` | Export tax rebate materials & full document chain |
 
 ---
 
@@ -227,6 +237,23 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 
 ---
 
+### Branch 8: Order Execution & Export Compliance (New in v2.2.0)
+
+**Purpose**: After the quotation is accepted, run the end-to-end fulfilment chain from pre-order preparation to export tax rebate. Full detail: `workflows/execution.md`; checklist & forms: `templates/execution-checklist.md`.
+
+**Phases:**
+
+1. **Pre-order (下单前)** — Verify product copyright & certifications; finalize customization details + HS code + factory VAT-invoice capability; sign factory purchase contract (no vague terms; payment ratio & bank info at branch level); quote client (see Branch 2, incl. amortizing extra fees).
+2. **In production (下单生产中)** — Product outer-packaging design (toy warning labels per CPSC/ASTM F963: age range + choking-hazard warning, WARNING highlighted; battery mark UN3481; outer-carton main/side marks with G.W./N.W./MEAS./MADE IN CHINA) + product testing/certification (ASTM F963-23, CPSIA, 微生物/TRA/防腐, UN38.3, CPC certificate).
+3. **Production complete (生产完成)** — Offline inspection against purchase contract + customization sheet; **re-measure** outer-carton dims / product dims / gross / net weight (sole basis for booking, declaration, documents); container plan (排柜) by container type + carton dims + factory locations; sync loading info to forwarder & factory.
+4. **Loading & export declaration (装柜与报关)** — 9-step loading photos (plate/carton no./empty/half/full/right door/left door/seal); Shipping Instructions (SI) — English, ≤5% weight tolerance vs actual weighing, update on实装 difference; customs documents (8 items, one set per container) with 单单一致、单货一致.
+5. **Destination clearance (清关)** — B/L + Packing List + Commercial Invoice three-consistent; release original B/L only after full payment; US ISF (customer files; 72h before vessel departure; USD 5,000–10,000 penalty).
+6. **Export tax rebate (退税)** — Per-container document chain (customs declaration + release slip + manifest + authorization; purchase/sales contracts; outbound order with signatures; VAT invoice matching HS/报关品名; foreign-trade docs; logistics docs); rebate exchange rate = first working day of the loading month.
+
+**Hard rule**: Execute strictly on **factory-measured data + forwarder written confirmation + actual loading documents**; never use product bare dimensions or estimated values.
+
+---
+
 ## Prohibitions (Hard Rules)
 
 | # | Rule | Violation Consequence |
@@ -246,6 +273,12 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | 13 | **Quotation terms must align with forwarder terms** | Any change in forwarder terms (costs, schedules, routes) must be reflected in quotation updates; maintain version control for quote revisions |
 | 14 | **Sudden compliance changes halt the workflow** | If product or destination compliance status changes mid-process, immediately halt quotation, re-verify, and escalate to [老板] before proceeding |
 | 15 | **Forwarder default requires immediate contingency** | If forwarder fails to confirm or withdraws, activate backup inquiry within 24h and notify client with revised timeline |
+| 16 | **Shipping Instructions (SI) must match actual loading** | SI weight tolerance vs actual weighing ≤5%; if actual loading differs from container plan, issue《实际装柜清单》and revise SI immediately |
+| 17 | **Customs & clearance "single-consistency"** | Customs docs: 单单一致、单货一致 across 品名/规格/数量/毛净重/体积/HS/柜号·封号; clearance: B/L + Commercial Invoice + Packing List fully consistent |
+| 18 | **Declare actual transaction value** | Never under-report or over-report customs value; the contract/agreement number on the declaration must be the final client PO number |
+| 19 | **Prerequisite compliance files must be complete** | Battery: UN38.3 + MSDS + non-DG letter; toys: CPC/ASTM F963-23/CPSIA; chemicals: 微生物/TRA/防腐 reports; US ISF handled by customer (72h before departure) |
+| 20 | **Tax-rebate documents archived per container with full evidence chain** | Include driver/transport/outbound/warehouse-in docs; rebate exchange rate = first working day of the loading month (per PBOC) |
+| 21 | **Product IP/copyright must be pre-cleared** | Confirm copyright ownership on first contact with a product; verify certificate validity & applicable country/region before quoting or producing |
 
 ---
 
@@ -259,7 +292,7 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | `regulations/southeast-asia.md` | VN/TH/SG | SG importer definition, VN NSW decree 336/2026, TH customs |
 | `regulations/middle-east.md` | UAE/KSA | SABER/ZATCA 12-digit HS, UAE e-invoicing phases |
 | `regulations/japan-korea.md` | JP/KR | JP 2026 consumption tax, 8-digit HS, customs agent; KR broker |
-| `regulations/products.md` | Product compliance | UN38.3 battery, SDS/MSDS, IMDG, CE, OOG rules |
+| `regulations/products.md` | Product compliance | UN38.3 battery, SDS/MSDS, IMDG, CE, OOG rules, US toy certs (ASTM F963-23/CPSIA/CPC) + CPSC warning-label rules |
 
 **Rule**: Every regulation entry stores source URL and `last_verified` date; re-verify before each final quote.
 
@@ -275,6 +308,17 @@ You are a **Cross-Border Trade Quotation Specialist** responsible for:
 | `templates/cif-validator.md` | Quotation item-by-item validator | Chinese |
 | `templates/quotation-docx.md` | **Word quotation JSON field notes** | Bilingual |
 | `templates/sample-quotation.json` | **Sample input for quotation generator** | English |
+| `templates/execution-checklist.md` | **Order-execution checklist (68 items) + forms** (产品明细表/产品检测资料表/报关材料/退税资料) | Chinese |
+
+## Workflow Files
+
+| File | Purpose |
+|------|---------|
+| `workflows/inquiry.md` | Freight-forwarder inquiry procedure |
+| `workflows/quotation.md` | Regulation-aware quotation formula + Word generation flow |
+| `workflows/validation.md` | OOG & route validation decision tree |
+| `workflows/edge-cases.md` | Special-scenario handling methodology (v2.1) |
+| `workflows/execution.md` | **Order execution & export compliance full process (v2.2)** — pre-order → production → loading/customs → clearance → rebate |
 
 ## Scripts
 
@@ -306,3 +350,4 @@ Load persona from `agents/trade-agent.md` when this skill is activated.
 - v1.0.0 (2026-10-26): Initial release based on Brazil helmet cleaning machine & USA Wisconsin mobile house lessons.
 - v2.0.0 (2026-10-26): **Universal multi-country upgrade** — regulation library for 10+ countries/regions (Brazil, USA, EU/DE/NL, UK, VN/TH/SG, UAE/KSA, JP/KR), product compliance module (UN38.3/MSDS/IMDG/CE/OOG), automatic Word (.docx) quotation generation from product & forwarder inputs, regulation citation with validity dates, brief compliance notes in quotations.
 - v2.1.0 (2026-10-26): **Special Scenarios & Edge Cases Handling** — added Branch 3 for special scenarios (transport reachability, product compliance sudden changes, terminology boundaries, timeline misalignment, forwarder default, change management), 5 new hard rules (#11–#15) covering transport alternatives, factory-stage product confirmation, forwarder-quote alignment, compliance change halting, and forwarder default contingency; added 4 new trigger commands (`特殊场景`, `偏远地址`, `产品合规突变`, `货代违约`).
+- v2.2.0 (2026-11-04): **Order Execution & Export Compliance** — incorporated the company《外贸流程以及注意要点》document: new workflow `workflows/execution.md` (6 phases: pre-order → in-production packaging/testing → production-complete inspection/container plan → loading & export declaration → destination clearance → export tax rebate) and `templates/execution-checklist.md` (68-item checklist + 4 forms); added Branch 8 and 6 new hard rules (#16–#21) covering SI/actual-loading consistency, 单单一致·单货一致, actual-value declaration, prerequisite compliance files, per-container rebate evidence chain, and IP pre-clearance; enriched `regulations/products.md` with US toy certification (ASTM F963-23/CPSIA/CPC) and CPSC warning-label rules; added trigger commands (`履约`, `下单`, `生产`, `包装设计`, `检测`, `验货`, `排柜`, `装柜`, `报关`, `提单补料`, `SI`, `清关文件`, `ISF`, `退税`).
